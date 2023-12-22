@@ -33,7 +33,7 @@ struct PreScanSurveyHeightInputView: View {
     }
 
     private var pickerRange: ClosedRange<Int> {
-        viewModel.locale.isMetricSystem ? 61...269 : 2...8
+        viewModel.locale.isMetricSystem ? 6...26 : 2...8
     }
 
     private func primaryPickerLabelView() -> some View {
@@ -41,10 +41,24 @@ struct PreScanSurveyHeightInputView: View {
             .font(.system(size: 46, weight: .semibold))
     }
 
+    @ViewBuilder
     private func primaryPickerContentView() -> some View {
-        ForEach(pickerRange, id: \.self) { value in
-            Button("\(value) \(viewModel.heightPrimaryUnit)") {
-                viewModel.heightPrimary = "\(value)"
+        if viewModel.locale.isMetricSystem {
+            ForEach(pickerRange, id: \.self) { decimeter in
+                Menu("\(decimeter)0 см - \(decimeter)9 см") {
+                    ForEach(0...9, id: \.self) { centimeter in
+                        let centimeters = decimeter * 10 + centimeter
+                        Button("\(centimeters) cm") {
+                            viewModel.heightPrimary = "\(centimeters)"
+                        }
+                    }
+                }
+            }
+        } else {
+            ForEach(pickerRange, id: \.self) { value in
+                Button("\(value) ′") {
+                    viewModel.heightPrimary = "\(value)"
+                }
             }
         }
     }

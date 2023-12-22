@@ -10,7 +10,7 @@ public class HeightInputViewModel {
         self.locale = locale
     }
     
-    public var heightPrimaryUnit: String {
+    private var heightPrimaryUnit: String {
         locale.isMetricSystem ? "cm" : "′"
     }
 
